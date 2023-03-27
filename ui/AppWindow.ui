@@ -119,7 +119,7 @@
       <item row="7" column="2">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="addline_btn">
           <property name="text">
            <string>Adicionar
 Linha</string>
@@ -127,7 +127,7 @@ Linha</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="removeline_btn">
           <property name="text">
            <string>Remover
 Linha</string>
@@ -135,7 +135,7 @@ Linha</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="gerarrelatorio_btn">
           <property name="text">
            <string>Gerar
  e Imprimir 
@@ -189,7 +189,7 @@ Garantias</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="QPushButton" name="guiafornecedor_btn">
           <property name="text">
            <string>Guia
 Fornecedor</string>
@@ -197,7 +197,7 @@ Fornecedor</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_4">
+         <widget class="QPushButton" name="guiapecas_btn">
           <property name="text">
            <string>Guia Peças</string>
           </property>

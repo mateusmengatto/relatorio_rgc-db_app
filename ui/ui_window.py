@@ -89,20 +89,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.pushButton = QPushButton(self.centralwidget)
-        self.pushButton.setObjectName(u"pushButton")
+        self.addline_btn = QPushButton(self.centralwidget)
+        self.addline_btn.setObjectName(u"addline_btn")
 
-        self.verticalLayout_2.addWidget(self.pushButton)
+        self.verticalLayout_2.addWidget(self.addline_btn)
 
-        self.pushButton_3 = QPushButton(self.centralwidget)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.removeline_btn = QPushButton(self.centralwidget)
+        self.removeline_btn.setObjectName(u"removeline_btn")
 
-        self.verticalLayout_2.addWidget(self.pushButton_3)
+        self.verticalLayout_2.addWidget(self.removeline_btn)
 
-        self.pushButton_2 = QPushButton(self.centralwidget)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.gerarrelatorio_btn = QPushButton(self.centralwidget)
+        self.gerarrelatorio_btn.setObjectName(u"gerarrelatorio_btn")
 
-        self.verticalLayout_2.addWidget(self.pushButton_2)
+        self.verticalLayout_2.addWidget(self.gerarrelatorio_btn)
 
 
         self.gridLayout.addLayout(self.verticalLayout_2, 7, 2, 1, 1)
@@ -135,15 +135,15 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.pushButton_6)
 
-        self.pushButton_5 = QPushButton(self.centralwidget)
-        self.pushButton_5.setObjectName(u"pushButton_5")
+        self.guiafornecedor_btn = QPushButton(self.centralwidget)
+        self.guiafornecedor_btn.setObjectName(u"guiafornecedor_btn")
 
-        self.verticalLayout_3.addWidget(self.pushButton_5)
+        self.verticalLayout_3.addWidget(self.guiafornecedor_btn)
 
-        self.pushButton_4 = QPushButton(self.centralwidget)
-        self.pushButton_4.setObjectName(u"pushButton_4")
+        self.guiapecas_btn = QPushButton(self.centralwidget)
+        self.guiapecas_btn.setObjectName(u"guiapecas_btn")
 
-        self.verticalLayout_3.addWidget(self.pushButton_4)
+        self.verticalLayout_3.addWidget(self.guiapecas_btn)
 
 
         self.gridLayout.addLayout(self.verticalLayout_3, 7, 0, 1, 1)
@@ -223,19 +223,19 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem9 = self.tableWidget.verticalHeaderItem(3)
         ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"4", None));
         self.label.setText(QCoreApplication.translate("MainWindow", u"Relat\u00f3rio de Garantia - Db Truck", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Adicionar\n"
+        self.addline_btn.setText(QCoreApplication.translate("MainWindow", u"Adicionar\n"
 "Linha", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Remover\n"
+        self.removeline_btn.setText(QCoreApplication.translate("MainWindow", u"Remover\n"
 "Linha", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Gerar\n"
+        self.gerarrelatorio_btn.setText(QCoreApplication.translate("MainWindow", u"Gerar\n"
 " e Imprimir \n"
 "Relat\u00f3rio", None))
         self.rgc_lbl.setText(QCoreApplication.translate("MainWindow", u"RGC:", None))
         self.pushButton_6.setText(QCoreApplication.translate("MainWindow", u"Tutorial \n"
 "Garantias", None))
-        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Guia\n"
+        self.guiafornecedor_btn.setText(QCoreApplication.translate("MainWindow", u"Guia\n"
 "Fornecedor", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Guia Pe\u00e7as", None))
+        self.guiapecas_btn.setText(QCoreApplication.translate("MainWindow", u"Guia Pe\u00e7as", None))
         self.cliente_lbl.setText(QCoreApplication.translate("MainWindow", u"Cliente:", None))
         self.data_lbl.setText(QCoreApplication.translate("MainWindow", u"Data:", None))
         self.notafiscal_lbl.setText(QCoreApplication.translate("MainWindow", u"Nota Fiscal:", None))
