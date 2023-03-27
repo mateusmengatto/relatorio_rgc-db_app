@@ -11,10 +11,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.rgc_check_btn.clicked.connect(self.check_rgc_number)
-        rgc_number = self.rgc_lined.text()
-        rgc_number = self.rgc_lined.text()
+        
+        self.rgc_number = self.rgc_lined.text()
+        self.cliente = self.cliente_lined.text()
+        self.Data = self.date_lined.text()
+        self.nota_fiscal = self.notafiscal_lined.text()
 
- 
+        self.gerarrelatorio_btn.clicked.connect(self.gerar_relatorio)
+
 
     def check_rgc_number(self): #mudar esse método para caixa de diálogo com aviso.
         msg = QMessageBox()
@@ -37,6 +41,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.setText("Ok - Número ainda não utilizado!")
             msg.exec()
     
+    def gerar_relatorio(self): #modificar para criar pdf e imprimir $ver como deixar mais clean
+        self.rgc_number = self.rgc_lined.text()
+        self.cliente = self.cliente_lined.text()
+        self.Data = self.date_lined.text()
+        self.nota_fiscal = self.notafiscal_lined.text()
+        print(self.rgc_number, '\n',
+        self.cliente, '\n',
+        self.Data , '\n',
+        self.nota_fiscal
+        )
+ 
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
         reply = QMessageBox.question(self, 'Fechar', 'Deseja fechar o programa?',
@@ -48,6 +63,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Rejeitar o evento, mantendo a janela aberta
             event.ignore()
     
+    
+
+
 
 # _____Running Code_________#
 if __name__ == '__main__':
