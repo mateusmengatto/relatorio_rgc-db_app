@@ -11,14 +11,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.rgc_check_btn.clicked.connect(self.check_rgc_number)
-        
+
         self.rgc_number = self.rgc_lined.text()
         self.cliente = self.cliente_lined.text()
         self.Data = self.date_lined.text()
         self.nota_fiscal = self.notafiscal_lined.text()
 
         self.gerarrelatorio_btn.clicked.connect(self.gerar_relatorio)
+        self.addline_btn.clicked.connect(self.insert_row)
+        self.removeline_btn.clicked.connect(self.remove_row)
 
+        self.table_gar = self.tableWidget
+    
+    def insert_row(self):
+        self.table_gar.insertRow(1)
+    
+    def remove_row(self):
+        self.table_gar.removeRow(1)
 
     def check_rgc_number(self): #mudar esse método para caixa de diálogo com aviso.
         msg = QMessageBox()
@@ -42,16 +51,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.exec()
     
     def gerar_relatorio(self): #modificar para criar pdf e imprimir $ver como deixar mais clean
-        self.rgc_number = self.rgc_lined.text()
-        self.cliente = self.cliente_lined.text()
-        self.Data = self.date_lined.text()
-        self.nota_fiscal = self.notafiscal_lined.text()
-        print(self.rgc_number, '\n',
-        self.cliente, '\n',
-        self.Data , '\n',
-        self.nota_fiscal
-        )
- 
+        rgc = self.rgc_lined.text()
+        cliente = self.cliente_lined.text()
+        data = self.date_lined.text()
+        nf = self.notafiscal_lined.text()
+        print(rgc, cliente, data, nf )
+
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
         reply = QMessageBox.question(self, 'Fechar', 'Deseja fechar o programa?',
