@@ -28,6 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def remove_row(self):
         self.table_gar.removeRow(1)
+    
 
     def check_rgc_number(self): #mudar esse método para caixa de diálogo com aviso.
         msg = QMessageBox()
@@ -56,6 +57,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         data = self.date_lined.text()
         nf = self.notafiscal_lined.text()
         print(rgc, cliente, data, nf )
+        table_info = self.tableWidget
+
+        data = []
+        for row in range(table_info.rowCount()):
+            row_data = []
+            for column in range(table_info.columnCount()):
+                item = table_info.item(row, column)
+                row_data.append(item.text())
+            data.append(row_data)
+
+        for i in data:
+            print(i)
 
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
