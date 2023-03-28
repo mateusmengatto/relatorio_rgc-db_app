@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide6.QtGui import QIcon
 from ui.ui_window import Ui_MainWindow
 from PySide6.QtCore import QTimer
 import sys
@@ -22,6 +23,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.removeline_btn.clicked.connect(self.remove_row)
 
         self.table_gar = self.tableWidget
+        icon_db = QIcon('img\icon_db.png')
+
+        self.setWindowIcon(icon_db)
+        '''
+        Botões para gerar função:
+        Configurar o Gerar Relatório para criação de pdf (ver estruturação e como deixar no padrão) além de adicionar a db.
+        Botões Aba direita de abertura de arquivos como tutorial, guia fornecedor, guia peças;
+            - Ver formas de exibir este arquivo, ou externamente em outro programa ou estáticamente dentro de uma nova janela aberta no software
+        
+        Verificar como colocar uma nova aba no software para configurar a pesquisa e abertura do banco de dados
+        '''
     
     def insert_row(self):
         self.table_gar.insertRow(1)
