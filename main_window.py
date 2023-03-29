@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QKeyEvent
 from ui.ui_window import Ui_MainWindow
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, QEvent, QObject
+from typing import cast
 import sys
 
 
@@ -26,6 +27,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         icon_db = QIcon('img\icon_db.png')
 
         self.setWindowIcon(icon_db)
+
+        #monitorar ação
+        self.rgc_lined.installEventFilter(self) #selecionar o objeto para monitorar
+
         '''
         Botões para gerar função:
         Configurar o Gerar Relatório para criação de pdf (ver estruturação e como deixar no padrão) além de adicionar a db.
@@ -85,13 +90,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
         reply = QMessageBox.question(self, 'Fechar', 'Deseja fechar o programa?',
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             # Aceitar o evento, permitindo que a janela seja fechada
             event.accept()
         else:
             # Rejeitar o evento, mantendo a janela aberta
             event.ignore()
+    '''
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+
+        if event.type() == QEvent.Type.KeyPress:
+            event = cast(QKeyEvent, event)
+            text = self.rgc_lined.text()
+            self.statusBar. ### FOrmatar para o texto digitado e o campo que esta sendo digitado apararecer no StatusBar.
+            print(event.text())
+
+        return super().eventFilter(watched, event)
+'''
+
+
     
     
 
