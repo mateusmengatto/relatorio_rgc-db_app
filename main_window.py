@@ -1,9 +1,10 @@
-from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QFileDialog, QScrollArea, QWidget, QVBoxLayout
 from PySide6.QtGui import QIcon, QKeyEvent
 from ui.ui_window import Ui_MainWindow
 from PySide6.QtCore import QTimer, QEvent, QObject
 from typing import cast
 import sys
+
 
 
 
@@ -107,14 +108,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print(event.text())
 
         return super().eventFilter(watched, event)
-'''
 
-
-    
-    
-
-
-
+    '''
 # _____Running Code_________#
 if __name__ == '__main__':
     app = QApplication(sys.argv)
