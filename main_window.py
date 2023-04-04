@@ -2,8 +2,11 @@ from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QFileDialo
 from PySide6.QtGui import QIcon, QKeyEvent
 from ui.ui_window import Ui_MainWindow
 from PySide6.QtCore import QTimer, QEvent, QObject
+import PyPDF4
+from datetime import datetime
 from typing import cast
 import sys
+
 
 
 
@@ -53,7 +56,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Exibir a caixa de mensagem e obter o resultado do botão pressionado
         rgc_number_typed = self.rgc_lined.text()
-        if rgc_number_typed in ('1','123','2'):
+        if rgc_number_typed in ('1','123','2'): #mudar para procurar na db
             msg.setWindowTitle("Cuidado!")
             msg.setIcon(QMessageBox.Warning) 
             msg.setStyleSheet("color:white;background:red")
@@ -69,13 +72,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.setText("Ok - Número ainda não utilizado!")
             msg.exec()
     
-    def gerar_relatorio(self): #modificar para criar pdf e imprimir $ver como deixar mais clean
+    def gerar_relatorio(self):
+        # -------------- arrumar função -- refazer ----- #
+        # relatorio_pdf = PyPDF4.PdfFileWriter()
+        # page = PyPDF4.pdf.PageObject #Esta errado
+        # relatorio_pdf.add_page(page)
+        # page.mergePage(relatorio_pdf.PdfFileReader(open("texto.pdf", "rb")).getPage(0))   
+        # with open('arquivo.pdf', 'wb') as f:
+        #     relatorio_pdf.write(f)
+        
+        
+        
+        
+         #modificar para criar pdf e imprimir $ver como deixar mais clean
         rgc = self.rgc_lined.text()
         cliente = self.cliente_lined.text()
         data = self.date_lined.text()
-        nf = self.notafiscal_lined.text()
-        print(rgc, cliente, data, nf )
+        nota_fiscal = self.notafiscal_lined.text()
+        print(rgc, cliente, data, nota_fiscal )
         table_info = self.tableWidget
+
+        msg = QMessageBox()
+
+        if not all([rgc, cliente, data, nota_fiscal]):# Verifica se todos os campos foram preenchidos
+            msg.setWindowTitle("Cuidado!")
+            msg.setIcon(QMessageBox.Warning) 
+            msg.setStyleSheet("color:white;background:red")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.setText("Erro', 'Por favor, preencha todos os campos.")
+            msg.exec()
+
 
         data = []
         for row in range(table_info.rowCount()):
