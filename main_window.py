@@ -6,10 +6,12 @@ import PyPDF4
 from datetime import datetime
 from typing import cast
 import sys
-####
+####imports for table
+from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, inch
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 ###
 
 
@@ -81,7 +83,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cliente = self.cliente_lined.text()
         data = self.date_lined.text()
         nota_fiscal = self.notafiscal_lined.text()
-        print(rgc, cliente, data, nota_fiscal )
+        # print(rgc, cliente, data, nota_fiscal )
         table_info = self.tableWidget
 
         msg = QMessageBox()
@@ -102,29 +104,66 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item = table_info.item(row, column)
                 row_data.append(item.text())
             data.append(row_data)
-#### tabela no pdf - mudar para A4, com imagem de cabeçalho etc, o modelo ta tabela, a posição e etc.
-#Caso não seja possível usar o PyPDF4 utilizando transformação de html para pdf
-        doc = SimpleDocTemplate(f"RGC{rgc} - {cliente}.pdf", pagesize=A4)
-        # container for the 'Flowable' objects
-        elements = []
-        t=Table(data,table_info.columnCount()*[1*inch], table_info.rowCount()*[1*inch]) #arrumar isso no loop e tamanho dinâmico e cores e etc
-        t.setStyle(TableStyle([('ALIGN',(1,1),(-2,-2),'RIGHT'),
-        ('TEXTCOLOR',(1,1),(-2,-2),colors.red),
-        ('VALIGN',(0,0),(0,-1),'TOP'),
-        ('TEXTCOLOR',(0,0),(0,-1),colors.blue),
-        ('ALIGN',(0,-1),(-1,-1),'CENTER'),
-        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
-        ('TEXTCOLOR',(0,-1),(-1,-1),colors.green),
-        ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-        ]))
+            print(data) # ta dandos uns bo, veja o modelo model-gpt para arrumar
 
+        # # Define o estilo dos parágrafos
+        # styles = getSampleStyleSheet()
+        # nome_style = styles["Heading1"]
+        # cliente_style = ParagraphStyle(name="ClienteStyle", fontName="Helvetica", fontSize=12, leading=14)
+        # info_style = ParagraphStyle(name="InfoStyle", fontName="Helvetica", fontSize=10, leading=12)
+        # comentario_style = ParagraphStyle(name="ComentarioStyle", fontName="Helvetica", fontSize=10, leading=12, spaceBefore=10)
 
-        elements.append(t)
-        # write the document to disk
-        doc.build(elements)
+        # # Define o nome do arquivo PDF
+        # filename = "exemplo.pdf"
 
+        # # Define os dados do cabeçalho
+        # nome = f"RGC {rgc} - {cliente}"
+        # data = f"Data: {data}"
+        # nota = f"Nota fiscal: {nota_fiscal}"
 
+        # # Define o comentário
+        # comentario = "Esse é um exemplo de PDF criado com ReportLab."
+
+        # # Define o conteúdo do PDF
+        # conteudo = []
+
+        # #definir dados
+        # dados = data
+
+        # # Adiciona o nome do relatório
+        # conteudo.append(Paragraph(nome, nome_style))
+
+        # # Adiciona as informações do cliente, ano e nota
+        # conteudo.append(Paragraph(cliente, cliente_style))
+        # conteudo.append(Paragraph(data, info_style))
+        # conteudo.append(Paragraph(nota, info_style))
+
+        # # Adiciona a tabela
+        # tabela = Table(data)
+        # tabela.setStyle(TableStyle([
+        #     ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        #     ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        #     ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        #     ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        #     ("FONTSIZE", (0, 0), (-1, 0), 14),
+        #     ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+        #     ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        #     ("TEXTCOLOR", (0, 1), (-1, -1), colors.black),
+        #     ("ALIGN", (0, 1), (-1, -1), "CENTER"),
+        #     ("ALIGN", (1, 1), (-1, -1), "LEFT"),
+        #     ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        #     ("FONTSIZE", (0, 1), (-1, -1), 10),
+        #     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        #     ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        #     ]))
+
+        # conteudo.append(tabela)
+        # conteudo.append(Paragraph(comentario, comentario_style))
+
+        # doc = SimpleDocTemplate(filename, pagesize=letter)
+        # doc.build(conteudo)
+
+    #def clear all
 
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
