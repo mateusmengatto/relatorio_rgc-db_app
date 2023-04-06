@@ -352,3 +352,6 @@ MigrationBackup/
 #Python venv
 env/
 
+#test file
+model-gpt.py
+.pdf/
