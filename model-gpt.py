@@ -1,105 +1,117 @@
-import sys
-import sqlite3
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem
-from reportlab.pdfgen import canvas
-
-class MyWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle('Gerador de relatório')
-
-        self.number_label = QLabel('Número do relatório:')
-        self.number_input = QLineEdit()
-
-        self.client_label = QLabel('Cliente:')
-        self.client_input = QLineEdit()
-
-        self.date_label = QLabel('Data:')
-        self.date_input = QLineEdit()
-
-        self.nf_label = QLabel('Nota fiscal:')
-        self.nf_input = QLineEdit()
-
-        self.table = QTableWidget()
-        self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(['Descrição', 'Quantidade', 'Valor'])
-
-        self.addRowBtn = QPushButton('Adicionar linha')
-        self.addRowBtn.clicked.connect(self.addRow)
-
-        self.generate_button = QPushButton('Gerar relatório')
-        self.generate_button.clicked.connect(self.generate_report)
-
-        vbox = QVBoxLayout()
-        hbox1 = QHBoxLayout()
-        hbox1.addWidget(self.number_label)
-        hbox1.addWidget(self.number_input)
-        hbox1.addWidget(self.client_label)
-        hbox1.addWidget(self.client_input)
-        hbox1.addWidget(self.date_label)
-        hbox1.addWidget(self.date_input)
-        hbox1.addWidget(self.nf_label)
-        hbox1.addWidget(self.nf_input)
-        vbox.addLayout(hbox1)
-        vbox.addWidget(self.table)
-        vbox.addWidget(self.addRowBtn)
-        vbox.addWidget(self.generate_button)
-
-        self.setLayout(vbox)
-
-        self.show()
-
-    def addRow(self):
-        numRows = self.table.rowCount()
-        self.table.insertRow(numRows)
-        for col in range(self.table.columnCount()):
-            self.table.setItem(numRows, col, QTableWidgetItem(''))
-
-    def generate_report(self):
-        number = self.number_input.text()
-        client = self.client_input.text()
-        date = self.date_input.text()
-        nf = self.nf_input.text()
-
-        # Conexão com o banco de dados SQLite
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-
-        # Criação da tabela caso ela não exista
-        cursor.execute('CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, numero TEXT, cliente TEXT, data TEXT, nf TEXT, descricao TEXT, quantidade TEXT, valor TEXT)')
+# import PyPDF2
+# from reportlab.pdfgen import canvas
+# from reportlab.lib.pagesizes import A4
+# from reportlab.lib.units import inch
+# from reportlab.lib import colors
+# from reportlab.lib.styles import ParagraphStyle
+# from reportlab.lib.enums import TA_CENTER
+# from reportlab.lib import utils
+# from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 
 
-        # Inserção dos dados na tabela
-        cursor.execute('INSERT INTO usuarios (numero, cliente, data, nf) VALUES (?, ?, ?, ?)', (number, client, date, nf))
-        conn.commit()
+# # Criando o cabeçalho
+# # def create_header(canvas, doc):
+# #     canvas.saveState()
+# #     canvas.drawImage('header.png', 0, 720, 595, 75)
+# #     canvas.restoreState()
 
-        # Geração do relatório em PDF
-        c = canvas.Canvas('relatorio.pdf')
 
-        c.drawString(100, 750, 'Relatório')
-        c.drawString(100, 700, f'Número do relatório: {number}')
-        c.drawString(100, 650, f'Cliente: {client}')
-        c.drawString(100, 600, f'Data: {date}')
-        c.drawString(100, 550, f'Nota fiscal: {nf}')
+# # Criando o título
+# def create_title(canvas, doc):
+#     canvas.setFont('Helvetica-Bold', 18)
+#     canvas.drawCentredString(297.5, 670, 'Relatório')
+#     canvas.setFont('Helvetica', 14)
+#     canvas.drawString(50, 620, 'Subtítulo 1')
+#     canvas.drawString(50, 590, 'Subtítulo 2')
+#     canvas.drawString(50, 560, 'Subtítulo 3')
 
-        # Adição da tabela no relatório
-        y = 500
-        for row in range(self.table.rowCount()):
-            descricao = self.table.item(row, 0).text()
-            quantidade = self.table.item(row, 1).text()
-            valor = self.table.item(row, 2).text()
-            c.drawString(100, y, descricao)
-            c.drawString(250, y, quantidade)
-            c.drawString(350, y, valor)
-            y -= 20
 
-        c.save()
+# # Criando a tabela
+# def create_table(canvas, doc):
+#     data = [['Item', 'Quantidade', 'Preço'], 
+#             ['Item 1', '1', 'R$ 10,00'], 
+#             ['Item 2', '2', 'R$ 20,00'], 
+#             ['Item 3', '3', 'R$ 30,00']]
+#     table = Table(data, colWidths=[3*inch, 1*inch, 1.5*inch])
+#     table.setStyle(TableStyle([('BACKGROUND', (0,0), (-1,0), colors.HexColor('#CCCCCC')), 
+#                                ('TEXTCOLOR', (0,0), (-1,0), colors.black), 
+#                                ('ALIGN', (0,0), (-1,0), 'CENTER'), 
+#                                ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+#                                ('FONTSIZE', (0,0), (-1,0), 12),
+#                                ('BOTTOMPADDING', (0,0), (-1,0), 12),
+#                                ('BACKGROUND', (0,1), (-1,-1), colors.white), 
+#                                ('TEXTCOLOR', (0,1), (-1,-1), colors.black), 
+#                                ('ALIGN', (0,1), (-1,-1), 'CENTER'), 
+#                                ('FONTNAME', (0,1), (-1,-1), 'Helvetica'),
+#                                ('FONTSIZE', (0,1), (-1,-1), 10),
+#                                ('GRID', (0,0), (-1,-1), 1, colors.black)]))
+#     table.wrapOn(canvas, 0, 0)
+#     table.drawOn(canvas, 50, 400)
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MyWindow()
-    sys.exit(app.exec_())
+
+# # Criando a caixa de texto
+# def create_text_box(canvas, doc):
+#     style = ParagraphStyle(name='Normal', fontName='Helvetica', fontSize=12, leading=14)
+#     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+#     p = Paragraph(text, style)
+#     p.wrapOn(canvas, 500, 200)
+#     p.drawOn(canvas, 50, 200)
+
+
+# # Criando o documento
+# doc = SimpleDocTemplate('relatorio.pdf', pagesize=A4)
+# doc.build()
+# # create_title, create_table, create_text_box])
+
+# with open('relatorio.pdf', 'rb') as pdf_file:
+#     reader = PyPDF2.PdfFileReader(pdf_file)
+#     print(reader.numPages) # verificar o número de páginas
+
+
+# from reportlab.lib.pagesizes import A4
+# from reportlab.pdfgen import canvas
+
+# w, h = A4
+# c = canvas.Canvas("shapes.pdf", pagesize=A4)
+# c.drawString(30, h - 50, "Line")
+# x = 120
+# y = h - 45
+# b = 'Lineedit confirmations'
+# c.line(x, y, x + 100, y)
+# c.drawString(30, h - 100, b)
+# c.rect(x, h - 120, 100, 50)
+# c.drawString(30, h - 170, "Circle")
+# c.circle(170, h - 165, 20)
+# c.drawString(30, h - 240, "Ellipse")
+# c.ellipse(x, y - 170, x + 100, y - 220)
+# c.showPage()
+# c.save()
+# # ____________________________________
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter, inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+
+doc = SimpleDocTemplate("simple_table_grid.pdf", pagesize=letter)
+# container for the 'Flowable' objects
+elements = []
+
+data= [['00', '01', '02', '03', '04'],
+['10', '11', '12', '13', '14'],
+['20', '21', '22', '23', '24'],
+['30', '31', '32', '33', '34']]
+t=Table(data,5*[0.4*inch], 4*[0.4*inch])
+t.setStyle(TableStyle([('ALIGN',(1,1),(-2,-2),'RIGHT'),
+('TEXTCOLOR',(1,1),(-2,-2),colors.red),
+('VALIGN',(0,0),(0,-1),'TOP'),
+('TEXTCOLOR',(0,0),(0,-1),colors.blue),
+('ALIGN',(0,-1),(-1,-1),'CENTER'),
+('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
+('TEXTCOLOR',(0,-1),(-1,-1),colors.green),
+('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+('BOX', (0,0), (-1,-1), 0.25, colors.black),
+]))
+
+elements.append(t)
+# write the document to disk
+doc.build(elements)

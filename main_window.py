@@ -6,7 +6,11 @@ import PyPDF4
 from datetime import datetime
 from typing import cast
 import sys
-
+####
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+###
 
 
 
@@ -73,18 +77,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.exec()
     
     def gerar_relatorio(self):
-        # -------------- arrumar função -- refazer ----- #
-        # relatorio_pdf = PyPDF4.PdfFileWriter()
-        # page = PyPDF4.pdf.PageObject #Esta errado
-        # relatorio_pdf.add_page(page)
-        # page.mergePage(relatorio_pdf.PdfFileReader(open("texto.pdf", "rb")).getPage(0))   
-        # with open('arquivo.pdf', 'wb') as f:
-        #     relatorio_pdf.write(f)
-        
-        
-        
-        
-         #modificar para criar pdf e imprimir $ver como deixar mais clean
         rgc = self.rgc_lined.text()
         cliente = self.cliente_lined.text()
         data = self.date_lined.text()
@@ -101,7 +93,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.setStandardButtons(QMessageBox.Ok)
             msg.setText("Erro', 'Por favor, preencha todos os campos.")
             msg.exec()
-
+            return
 
         data = []
         for row in range(table_info.rowCount()):
@@ -110,9 +102,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item = table_info.item(row, column)
                 row_data.append(item.text())
             data.append(row_data)
+#### tabela no pdf - mudar para A4, com imagem de cabeçalho etc, o modelo ta tabela, a posição e etc.
+#Caso não seja possível usar o PyPDF4 utilizando transformação de html para pdf
+        doc = SimpleDocTemplate(f"RGC{rgc} - {cliente}.pdf", pagesize=A4)
+        # container for the 'Flowable' objects
+        elements = []
+        t=Table(data,table_info.columnCount()*[1*inch], table_info.rowCount()*[1*inch]) #arrumar isso no loop e tamanho dinâmico e cores e etc
+        t.setStyle(TableStyle([('ALIGN',(1,1),(-2,-2),'RIGHT'),
+        ('TEXTCOLOR',(1,1),(-2,-2),colors.red),
+        ('VALIGN',(0,0),(0,-1),'TOP'),
+        ('TEXTCOLOR',(0,0),(0,-1),colors.blue),
+        ('ALIGN',(0,-1),(-1,-1),'CENTER'),
+        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
+        ('TEXTCOLOR',(0,-1),(-1,-1),colors.green),
+        ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+        ]))
 
-        for i in data:
-            print(i)
+
+        elements.append(t)
+        # write the document to disk
+        doc.build(elements)
+
+
 
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
