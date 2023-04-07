@@ -85,6 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         nota_fiscal = self.notafiscal_lined.text()
         # print(rgc, cliente, data, nota_fiscal )
         table_info = self.tableWidget
+        coments = self.plainTextEdit.toPlainText()
 
         msg = QMessageBox()
 
@@ -97,71 +98,73 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.exec()
             return
 
-        data = []
+        
+        dados = [['COD PRODUTO','DEFEITO','QUANTIDADE', 'ULTIMA COMPRA', 'FORNECEDOR', 'GARANTIA']]
         for row in range(table_info.rowCount()):
             row_data = []
             for column in range(table_info.columnCount()):
                 item = table_info.item(row, column)
                 row_data.append(item.text())
-            data.append(row_data)
-            print(data) # ta dandos uns bo, veja o modelo model-gpt para arrumar
+            dados.append(row_data)
+        # print(data) # ta dandos uns bo, veja o modelo model-gpt para arrumar   
 
-        # # Define o estilo dos parágrafos
-        # styles = getSampleStyleSheet()
-        # nome_style = styles["Heading1"]
-        # cliente_style = ParagraphStyle(name="ClienteStyle", fontName="Helvetica", fontSize=12, leading=14)
-        # info_style = ParagraphStyle(name="InfoStyle", fontName="Helvetica", fontSize=10, leading=12)
-        # comentario_style = ParagraphStyle(name="ComentarioStyle", fontName="Helvetica", fontSize=10, leading=12, spaceBefore=10)
+        # Define o estilo dos parágrafos
+        styles = getSampleStyleSheet()
+        nome_style = styles["Heading1"]
+        cliente_style = ParagraphStyle(name="ClienteStyle", fontName="Helvetica", fontSize=12, leading=14)
+        info_style = ParagraphStyle(name="InfoStyle", fontName="Helvetica", fontSize=10, leading=12)
+        comentario_style = ParagraphStyle(name="ComentarioStyle", fontName="Helvetica", fontSize=10, leading=12, spaceBefore=10)
 
-        # # Define o nome do arquivo PDF
-        # filename = "exemplo.pdf"
+        # Define o nome do arquivo PDF
+        filename = f"RGC{rgc}_{cliente}.pdf"
 
-        # # Define os dados do cabeçalho
-        # nome = f"RGC {rgc} - {cliente}"
-        # data = f"Data: {data}"
-        # nota = f"Nota fiscal: {nota_fiscal}"
+        # Define os dados do cabeçalho
+        nome = f"RGC {rgc} - {cliente}"
+        data = f"Data: {data}"
+        nota = f"Nota fiscal: {nota_fiscal}"
 
-        # # Define o comentário
-        # comentario = "Esse é um exemplo de PDF criado com ReportLab."
+        # Define o comentário
+        comentario = f"{coments}"
 
-        # # Define o conteúdo do PDF
-        # conteudo = []
+        # Define o conteúdo do PDF
+        conteudo = []
 
-        # #definir dados
-        # dados = data
+        
+        #definir dados
 
-        # # Adiciona o nome do relatório
-        # conteudo.append(Paragraph(nome, nome_style))
 
-        # # Adiciona as informações do cliente, ano e nota
-        # conteudo.append(Paragraph(cliente, cliente_style))
-        # conteudo.append(Paragraph(data, info_style))
-        # conteudo.append(Paragraph(nota, info_style))
+        # Adiciona o nome do relatório
+        conteudo.append(Paragraph(nome, nome_style))
 
-        # # Adiciona a tabela
-        # tabela = Table(data)
-        # tabela.setStyle(TableStyle([
-        #     ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-        #     ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-        #     ("ALIGN", (0, 0), (-1, 0), "CENTER"),
-        #     ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        #     ("FONTSIZE", (0, 0), (-1, 0), 14),
-        #     ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-        #     ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
-        #     ("TEXTCOLOR", (0, 1), (-1, -1), colors.black),
-        #     ("ALIGN", (0, 1), (-1, -1), "CENTER"),
-        #     ("ALIGN", (1, 1), (-1, -1), "LEFT"),
-        #     ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
-        #     ("FONTSIZE", (0, 1), (-1, -1), 10),
-        #     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-        #     ("GRID", (0, 0), (-1, -1), 1, colors.black),
-        #     ]))
+        # Adiciona as informações do cliente, ano e nota
+        conteudo.append(Paragraph(cliente, cliente_style))
+        conteudo.append(Paragraph(data, info_style))
+        conteudo.append(Paragraph(nota, info_style))
 
-        # conteudo.append(tabela)
-        # conteudo.append(Paragraph(comentario, comentario_style))
+        # Adiciona a tabela
+        tabela = Table(dados)
+        tabela.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("FONTSIZE", (0, 0), (-1, 0), 14),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+            ("TEXTCOLOR", (0, 1), (-1, -1), colors.black),
+            ("ALIGN", (0, 1), (-1, -1), "CENTER"),
+            ("ALIGN", (1, 1), (-1, -1), "LEFT"),
+            ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 1), (-1, -1), 10),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+            ]))
 
-        # doc = SimpleDocTemplate(filename, pagesize=letter)
-        # doc.build(conteudo)
+        conteudo.append(tabela)
+        conteudo.append(Paragraph(comentario, comentario_style))
+
+        doc = SimpleDocTemplate(filename, pagesize=letter)
+        doc.build(conteudo)
 
     #def clear all
 

@@ -33,7 +33,8 @@ comentario = "Esse é um exemplo de PDF criado com ReportLab."
 
 # Define o conteúdo do PDF
 conteudo = []
-
+print(dados)
+print(dados.type)
 # Adiciona o nome do relatório
 conteudo.append(Paragraph(nome, nome_style))
 
