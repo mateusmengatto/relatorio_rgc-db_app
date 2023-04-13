@@ -352,3 +352,7 @@ MigrationBackup/
 #Python venv
 env/
 
+#Folder models
+script_models/
+
+
