@@ -1,9 +1,19 @@
-from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox, QFileDialog, QScrollArea, QWidget, QVBoxLayout
 from PySide6.QtGui import QIcon, QKeyEvent
 from ui.ui_window import Ui_MainWindow
 from PySide6.QtCore import QTimer, QEvent, QObject
+import PyPDF4
+from datetime import datetime
 from typing import cast
 import sys
+####imports for table
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+###
+
 
 
 
@@ -52,7 +62,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Exibir a caixa de mensagem e obter o resultado do botão pressionado
         rgc_number_typed = self.rgc_lined.text()
-        if rgc_number_typed in ('1','123','2'):
+        if rgc_number_typed in ('1','123','2'): #mudar para procurar na db
             msg.setWindowTitle("Cuidado!")
             msg.setIcon(QMessageBox.Warning) 
             msg.setStyleSheet("color:white;background:red")
@@ -68,13 +78,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.setText("Ok - Número ainda não utilizado!")
             msg.exec()
     
-    def gerar_relatorio(self): #modificar para criar pdf e imprimir $ver como deixar mais clean
+    def gerar_relatorio(self):
         rgc = self.rgc_lined.text()
         cliente = self.cliente_lined.text()
         data = self.date_lined.text()
-        nf = self.notafiscal_lined.text()
-        print(rgc, cliente, data, nf )
+        nota_fiscal = self.notafiscal_lined.text()
+        # print(rgc, cliente, data, nota_fiscal )
         table_info = self.tableWidget
+
+        msg = QMessageBox()
+
+        if not all([rgc, cliente, data, nota_fiscal]):# Verifica se todos os campos foram preenchidos
+            msg.setWindowTitle("Cuidado!")
+            msg.setIcon(QMessageBox.Warning) 
+            msg.setStyleSheet("color:white;background:red")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.setText("Erro', 'Por favor, preencha todos os campos.")
+            msg.exec()
+            return
 
         data = []
         for row in range(table_info.rowCount()):
@@ -83,9 +104,66 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item = table_info.item(row, column)
                 row_data.append(item.text())
             data.append(row_data)
+            print(data) # ta dandos uns bo, veja o modelo model-gpt para arrumar
 
-        for i in data:
-            print(i)
+        # # Define o estilo dos parágrafos
+        # styles = getSampleStyleSheet()
+        # nome_style = styles["Heading1"]
+        # cliente_style = ParagraphStyle(name="ClienteStyle", fontName="Helvetica", fontSize=12, leading=14)
+        # info_style = ParagraphStyle(name="InfoStyle", fontName="Helvetica", fontSize=10, leading=12)
+        # comentario_style = ParagraphStyle(name="ComentarioStyle", fontName="Helvetica", fontSize=10, leading=12, spaceBefore=10)
+
+        # # Define o nome do arquivo PDF
+        # filename = "exemplo.pdf"
+
+        # # Define os dados do cabeçalho
+        # nome = f"RGC {rgc} - {cliente}"
+        # data = f"Data: {data}"
+        # nota = f"Nota fiscal: {nota_fiscal}"
+
+        # # Define o comentário
+        # comentario = "Esse é um exemplo de PDF criado com ReportLab."
+
+        # # Define o conteúdo do PDF
+        # conteudo = []
+
+        # #definir dados
+        # dados = data
+
+        # # Adiciona o nome do relatório
+        # conteudo.append(Paragraph(nome, nome_style))
+
+        # # Adiciona as informações do cliente, ano e nota
+        # conteudo.append(Paragraph(cliente, cliente_style))
+        # conteudo.append(Paragraph(data, info_style))
+        # conteudo.append(Paragraph(nota, info_style))
+
+        # # Adiciona a tabela
+        # tabela = Table(data)
+        # tabela.setStyle(TableStyle([
+        #     ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        #     ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        #     ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+        #     ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        #     ("FONTSIZE", (0, 0), (-1, 0), 14),
+        #     ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+        #     ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        #     ("TEXTCOLOR", (0, 1), (-1, -1), colors.black),
+        #     ("ALIGN", (0, 1), (-1, -1), "CENTER"),
+        #     ("ALIGN", (1, 1), (-1, -1), "LEFT"),
+        #     ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+        #     ("FONTSIZE", (0, 1), (-1, -1), 10),
+        #     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        #     ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        #     ]))
+
+        # conteudo.append(tabela)
+        # conteudo.append(Paragraph(comentario, comentario_style))
+
+        # doc = SimpleDocTemplate(filename, pagesize=letter)
+        # doc.build(conteudo)
+
+    #def clear all
 
     def closeEvent(self, event):
         # Criar a caixa de diálogo de confirmação
@@ -107,14 +185,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print(event.text())
 
         return super().eventFilter(watched, event)
-'''
 
-
-    
-    
-
-
-
+    '''
 # _____Running Code_________#
 if __name__ == '__main__':
     app = QApplication(sys.argv)

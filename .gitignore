@@ -352,7 +352,13 @@ MigrationBackup/
 #Python venv
 env/
 
+<<<<<<< HEAD
 #Folder models
 script_models/
 
 
+=======
+#test file
+model-gpt.py
+.pdf/
+>>>>>>> 59d5d93e29825c2c0818fd9c44b3c48b9e544dde
